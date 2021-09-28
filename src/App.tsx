@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { ResumeForm } from "./components/ResumeForm/ResumeForm";
+import { Resume } from "./components/Resume/Resume";
+import { bloc } from "./blocs/FormData";
+import { StreamBuilder } from "./components/StreamBuilder";
 
-function App() {
+function App(): JSX.Element {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ height: "100%" }} className="container-fluid p-5 bg-dark ">
+      <h3 className="text-white">Resume Builder</h3>
+      <div className="row">
+        <div className="card col-md-5 m-3">
+          <ResumeForm />
+        </div>
+        <div className="card col-md-6 m-3">
+          <StreamBuilder
+            stream={bloc.subject}
+            builder={(snapshot) => {
+              if (snapshot.hasData) {
+                const isEmpty = Object.values(snapshot.data!).every(
+                  (x) => x === null || x === ""
+                );
+                if (!isEmpty) {
+                  return <Resume formData={snapshot.data!} />;
+                } else {
+                  return <>Please Enter Data</>;
+                }
+              } else {
+                return <>Please Enter Data</>;
+              }
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
