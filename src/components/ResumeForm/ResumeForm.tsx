@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { BehaviorSubject } from "rxjs";
 import { bloc, Education } from "../../blocs/FormData";
 import "./index.css";
@@ -26,6 +26,19 @@ class PersonalData extends React.Component {
     super(props);
     this.state = {};
   }
+  onChange =
+    (input: any, type?: number) => (e: ChangeEvent<HTMLInputElement>) => {
+      if (typeof type === "number") {
+        const enuq = [...bloc.subject.value.address];
+        enuq[type] = e.target.value;
+        bloc.subject.next({ ...bloc.subject.getValue()!, [input]: enuq });
+      } else {
+        bloc.subject.next({
+          ...bloc.subject.getValue()!,
+          [input]: e.target.value,
+        });
+      }
+    };
   render() {
     return (
       <>
@@ -35,14 +48,8 @@ class PersonalData extends React.Component {
             <input
               type="text"
               className="form-control"
-              value={bloc.subject.value?.firstName}
               placeholder="First Name"
-              onChange={(e) => {
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  firstName: e.target.value,
-                });
-              }}
+              onChange={this.onChange("firstName")}
             />
           </div>
           <div className="form-group col-md-6">
@@ -50,13 +57,7 @@ class PersonalData extends React.Component {
               type="text"
               className="form-control"
               placeholder="Last Name"
-              value={bloc.subject.value?.lastName}
-              onChange={(e) => {
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  lastName: e.target.value,
-                });
-              }}
+              onChange={this.onChange("lastName")}
             />
           </div>
         </div>
@@ -65,14 +66,8 @@ class PersonalData extends React.Component {
             <input
               type="text"
               className="form-control"
-              value={bloc.subject.value?.email}
               placeholder="Email"
-              onChange={(e) => {
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  email: e.target.value,
-                });
-              }}
+              onChange={this.onChange("email")}
             />
           </div>
           <div className="form-group col-md-6">
@@ -80,13 +75,7 @@ class PersonalData extends React.Component {
               type="tel"
               className="form-control"
               placeholder="Phone"
-              value={bloc.subject.value?.phone}
-              onChange={(e) => {
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  phone: e.target.value,
-                });
-              }}
+              onChange={this.onChange("phone")}
             />
           </div>
         </div>
@@ -96,18 +85,7 @@ class PersonalData extends React.Component {
               type="text"
               className="form-control"
               placeholder="Address Info 1"
-              value={bloc.subject.getValue()!.address![0]}
-              onChange={(e) => {
-                const currentValue =
-                  bloc.subject.value?.address === undefined
-                    ? []
-                    : bloc.subject.value?.address;
-                const updatedValue = [e.target.value];
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  address: updatedValue,
-                });
-              }}
+              onChange={this.onChange("address", 0)}
             />
           </div>
         </div>
@@ -117,16 +95,7 @@ class PersonalData extends React.Component {
               type="tel"
               className="form-control"
               placeholder="Address Info 2"
-              onChange={(e) => {
-                let arr = [
-                  bloc.subject.getValue()!.address![0],
-                  e.target.value,
-                ];
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  address: arr,
-                });
-              }}
+              onChange={this.onChange("address", 1)}
             />
           </div>
         </div>
@@ -136,13 +105,7 @@ class PersonalData extends React.Component {
               type="tel"
               className="form-control"
               placeholder="Address Info 3"
-              value={bloc.subject.value?.phone}
-              onChange={(e) => {
-                bloc.subject.next({
-                  ...bloc.subject.value,
-                  phone: e.target.value,
-                });
-              }}
+              onChange={this.onChange("address", 2)}
             />
           </div>
         </div>
@@ -173,19 +136,8 @@ class EducationDetails extends React.Component<{}, { cards: any }> {
                 <input
                   type="text"
                   className="form-control"
-                  value={bloc.subject.value?.education![i].institue}
                   placeholder="Year (start-end)"
-                  onChange={(e) => {
-                    let education: Education[] = [];
-                    education[i] = {
-                      ...bloc.subject.value!.education![i],
-                      year: e.target.value,
-                    };
-                    bloc.subject.next({
-                      ...bloc.subject.value,
-                      education,
-                    });
-                  }}
+                  onChange={this.onChange("education", 0)}
                 />
               </div>
             </div>
@@ -212,19 +164,8 @@ class EducationDetails extends React.Component<{}, { cards: any }> {
                   <input
                     type="text"
                     className="form-control"
-                    value={bloc.subject.value?.education![i].institue}
                     placeholder="Year (start-end)"
-                    onChange={(e) => {
-                      let education: Education[] = [];
-                      education[i] = {
-                        ...bloc.subject.value!.education![i],
-                        year: e.target.value,
-                      };
-                      bloc.subject.next({
-                        ...bloc.subject.value,
-                        education,
-                      });
-                    }}
+                    onChange={this.onChange("education", i)}
                   />
                 </div>
               </div>
@@ -234,6 +175,9 @@ class EducationDetails extends React.Component<{}, { cards: any }> {
       });
     });
   }
+  onChange = (input: string, index: number) => (e: any) => {
+    
+  };
   render() {
     return (
       <>

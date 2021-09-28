@@ -27,13 +27,13 @@ export class StreamBuilder<T> extends Component<
       this.props.stream.subscribe({
         next: (data) => {
           console.log(data);
+
           this.setState({
             snapshot: new SnapshotController(data),
           });
         },
         error: (data) => {
-          console.log('@Error');
-          
+          console.log("@Error");
           this.setState({
             snapshot: new SnapshotController(undefined, data),
           });
